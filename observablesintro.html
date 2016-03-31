@@ -17,6 +17,9 @@
         font-weight: normal;
         color: #B7D5DB;
       }
+      a :active, :visited {
+        color: #B7D5DB;
+      }
       ul {
       list-style: none; /* Remove list bullets */
       padding: 0;
@@ -185,20 +188,44 @@ class: center, middle
 
 ---
 
+# Common Operators
+
+--
+- Map:
+
+--
+- Filter:
+
+--
+- Reduce:
+
+--
+- Scan:
+
+---
+
 # Simple Example
+
+- [Counter example](http://plnkr.co/edit/ZkKT5bFQWXahUBSG3NHW?p=preview) by Wayne Maurer
 
 ---
 
 # RxJS in Angular 2
 
-Angular 2 uses observables in two ways:
+--
+- ng2 does not prescribe a data flow architecture, making it flexible and able to be used with MVC or Flux
 
 --
-- Internally, to implement core logic like the `EventEmitter`
+- Possibility of a "Model-View-Intent" Architecture (Andre Staltz)
 
 --
-- In the API, specifically in forms and HTTP
+- Angular 2 uses observables in two ways:
 
+--
+  - Internally, to implement core logic like the `EventEmitter`
+
+--
+  - In the API, specifically in forms and HTTP, to help data flow between components
 
 ---
 # RxJS in ng2: Forms
@@ -207,7 +234,7 @@ Angular 2 uses observables in two ways:
 - Forms can be handled as observables that we subscribe to. The whole form is an observable, and the individual fields are also observables.
 
 --
-```
+```javascript
 <form [ngFormModel]="form" (ngSubmit)="onSubmit()">
    <p>
         <label>Payee:</label>
@@ -217,8 +244,25 @@ Angular 2 uses observables in two ways:
 ```
 
 --
+
 - `ngFormModel` lets us bind the form to a variable of type `ControlGroup` in the component. We can then access the form observable with `form.valueChanges`
 
+--
+- We can then use array and Rx operations:
+```javascript
+this.form.valueChanges
+        .map((value) => {
+            value.payee = value.payee.toLowerCase();
+            return value;
+        })
+        .filter((value) => this.form.valid)
+        .subscribe(validValue => ...);
+```
+---
+
+# RxJS in ng2: Http
+
+- 
 
 ---
 
@@ -226,6 +270,7 @@ Angular 2 uses observables in two ways:
 
 - [Official RxJS Docs](https://github.com/Reactive-Extensions/RxJS/tree/master/doc)
 - [Functional Reactive Programming for Angular 2 Developers](http://blog.jhades.org/functional-reactive-programming-for-angular-2-developers-rxjs-and-observables/)
+- [Reactive Data Flow in Angular 2](http://blog.lambda-it.ch/reactive-data-flow-in-angular-2/)
 
     </textarea>
     <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
