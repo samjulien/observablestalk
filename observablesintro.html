@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Intro to Observables in Angular 2</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif';
+        background-color: #353D3A;
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+        color: #B7D5DB;
+      }
+      ul {
+      list-style: none; /* Remove list bullets */
+      padding: 0;
+      margin: 0;
+      }
+      ul li { 
+          padding-left: 16px; 
+          margin-bottom: 10px;
+      }
+      ul li:before {
+          content: ">";
+          padding-right: 8px;
+          color: #88B4BB;
+      }
+      blockquote {
+        background-color: #4A6260;
+        padding: 20px;
+        color: whitesmoke;
+      }
+      .remark-slide-content {
+        background-color: #353D3A;
+        color: white;
+      }
+      .remark-code, .remark-inline-code { 
+        font-family: 'Ubuntu Mono'; 
+        background-color: grey;
+        color: white;
+      }
+       .remark-fading { z-index: 9; } 
+        
+      /* Thanks to http://www.partage-it.com/animez-vos-presentations-remark-js/  (in French) */
+      .remark-slide-container {transition: opacity 0.5s ease-out;opacity: 0;}
+      .remark-visible {transition: opacity 0.5s ease-out;opacity: 1;}
+        
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+<img src="https://avatars3.githubusercontent.com/u/6407041?v=3&s=400"/>
+
+# Intro to RxJS and Observables in Angular 2
+#### Sam Julien, Energy Trust
+
+---
+
+# Agenda
+
+1. Introduction
+2. Functional Programming
+3. Reactive Programming
+4. Functional Reactive Programming
+5. RxJS
+6. What are observables?
+7. Demo: Mouseclicks
+8. Observables in ng2
+9. Demo: ng2 Observables
+10. References
+
+---
+
+# Introduction
+
+- More data
+- More complexity
+- Greater demand to be asynchronous
+- One way data flow
+- Return of Functional Programming
+
+---
+
+# Functional Programming
+
+--
+- Around for decades, used a lot in academia
+
+--
+- Pure functions with no side effects
+
+--
+- Haskell, Scala, and recently Elm
+
+--
+- FP stresses (Neal Ford):
+
+--
+    - Immutability over state transactions
+--
+    - Results over steps
+--
+    - Composition over structure
+--
+    - Declarative over imperative
+--
+- In JavaScript, array functions like map, filter, and reduce are used in functional approaches
+---
+# Reactive Programming
+
+--
+- Reactive applications are asynchoronus and event-driven
+
+--
+- Best example ever: Excel
+
+--
+- What kinds of events?
+
+--
+- Big Concept&trade;: the stream, a sequence of events over time
+
+--
+- **Anything can be a stream**, from mouse clicks to data from a server
+
+--
+- Streams can then be thought of as arrays of values and operated on as such. For example, mouse click coordinates: `[(100,200), (300,400), (110,350)]`
+
+---
+# Put it together: Functional Reactive Programming
+
+- Entire applications can be built around streams
+- Create or identify the streams in your application, then combine and subscribe to them
+- Allows us to build in a delcarative style by defining streams, how they are connected, and what happens as new values arrive over time
+- Little to no application state (state is typically stored on certain streams or the DOM)
+---
+# RxJS
+
+--
+- RxJS is the JavaScript version of Microsoft's Reactive Extensions, which enable the creation of reactive applications with something called observables
+
+--
+- From the RxJS docs:
+
+>Using RxJS, developers ***represent*** asynchronous data streams with **Observables**, 
+>***query*** asynchronous data streams using **LINQ operators**, and ***parameterize*** 
+>the concurrency inthe asynchronous data streams using **Schedulers**. 
+>Simply put, Rx = Observables + LINQ + Schedulers.
+---
+
+# What are observables?
+
+--
+- A data type intoduced by RxJS to help us create, subscribe to, and react to streams
+
+--
+- Asynchronous, push-based sequences of data that can be subscribed to
+
+--
+- Think of them like an API for the stream, not the stream itself
+
+--
+- The *observer* subscribes to the event stream (the *observable*). The observable notifies the observer whenever an event occurs
+
+--
+- The `subscribe` method returns a `Disposable` object that allows you to clean up th subscription when you're done
+
+--
+- The Observable object contains `onNext`, `onError`, and `onComplete` methods that can invoke methods you specify
+
+--
+- Cold observables: no new values are generated if no subscriptions exist (e.g. API calls)
+
+--
+- Hot observables: data is coming no matter what (e.g. mouse clicks)
+
+---
+
+# Simple Example
+
+---
+
+# RxJS in Angular 2
+
+Angular 2 uses observables in two ways:
+
+--
+- Internally, to implement core logic like the `EventEmitter`
+
+--
+- In the API, specifically in forms and HTTP
+
+
+---
+# RxJS in ng2: Forms
+
+--
+- Forms can be handled as observables that we subscribe to. The whole form is an observable, and the individual fields are also observables.
+
+--
+```
+<form [ngFormModel]="form" (ngSubmit)="onSubmit()">
+   <p>
+        <label>Payee:</label>
+        <input type="text" ngControl="payee">
+   </p>
+</form>
+```
+
+--
+- `ngFormModel` lets us bind the form to a variable of type `ControlGroup` in the component. We can then access the form observable with `form.valueChanges`
+
+
+---
+
+# References
+
+- [Official RxJS Docs](https://github.com/Reactive-Extensions/RxJS/tree/master/doc)
+- [Functional Reactive Programming for Angular 2 Developers](http://blog.jhades.org/functional-reactive-programming-for-angular-2-developers-rxjs-and-observables/)
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
